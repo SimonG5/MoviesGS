@@ -5,6 +5,15 @@ from numpy import genfromtxt
 from numpy.linalg import norm
 
 averageRatings = {}
+rawMapping = []
+mapping = {}
+
+with open('datasets/movies.dat','r',encoding="UTF8") as f:
+    rawMapping = f.readlines()
+
+for line in rawMapping:
+    format = line.split("::")
+    mapping[format[0]] = format[1].rstrip()
 
 with open('datasets/averageRatings.json') as d:
     averageRatings = json.load(d)
@@ -14,17 +23,11 @@ userRating = []
 for i in range(0, 1130):
     userRating.append(float(averageRatings[str(i+1)]))
 
-userRating[1129] = 10
-userRating[891] = 10
-userRating[321] = 4
-userRating[560] = 2
-userRating[561] = 7
+userRating[689] = 9.5
+userRating[901] = 9.0
+userRating[483] = 8.5
+userRating[891] = 9.0
 
-userRating[139] = 10
-userRating[851] = 10
-userRating[371] = 4
-userRating[50] = 2
-userRating[5] = 7
 
 userNp = np.array(userRating)
 
@@ -40,4 +43,13 @@ for i in range(0, len(users)):
         bestCos = cosine
         bestIndex = i
 
-print("Matching user is " + str(i+1) + " with a simmilarity of " + str(bestCos))
+
+userBest = np.array(users[bestIndex])
+print("Matching user is " + str(bestIndex+1) + " with a simmilarity of " + str(bestCos))
+
+for i in range(0,len(userBest)):
+    if str(userBest[i]) != averageRatings[str(i+1)]:
+        print(mapping[str(i+1)] + " = " + str(userBest[i]))
+
+
+#maxElement = np.amax(arr)
