@@ -2,9 +2,19 @@ import numpy as np
 from numpy.linalg import norm
 import matplotlib.pyplot as plt
 
+rawMapping = []
+mapping = {}
+
+with open('datasets/movies.dat', 'r', encoding="UTF8") as f:
+    rawMapping = f.readlines()
+
+for line in rawMapping:
+    format = line.split("::")
+    mapping[format[0]] = format[1].rstrip()
+
 ratings = []
 
-with open('datasets/ratings.dat','r',encoding="UTF8") as f:
+with open('datasets/ratings.dat', 'r', encoding="UTF8") as f:
     ratings = f.readlines()
 
 origin = "891"
@@ -12,17 +22,16 @@ target = "1"
 dataOuter = []
 
 
-for i in range(0,1131): 
+for i in range(0, 1131):
     target = str(i+1)
     print(target)
-    data = []
     firstRatings = []
-    secondRatings = []    
+    secondRatings = []
     if target != origin:
-        for j in range(0,len(ratings)):
+        for j in range(0, len(ratings)):
             format = ratings[j].split("::")
             if format[1] == origin:
-                for k in range(j+1,len(ratings)):
+                for k in range(j+1, len(ratings)):
                     formatTwo = ratings[k].split("::")
                     if format[0] != formatTwo[0]:
                         break
@@ -30,7 +39,7 @@ for i in range(0,1131):
                         firstRatings.append(float(format[2].rstrip()))
                         secondRatings.append(float(formatTwo[2].rstrip()))
 
-                for k in range(j-1,0,-1):
+                for k in range(j-1, 0, -1):
                     formatTwo = ratings[k].split("::")
                     if format[0] != formatTwo[0]:
                         break
@@ -48,12 +57,12 @@ for i in range(0,1131):
 
 
 # Random 2D points to make scatter plot
-x = [np.random.random() for i in range(len(dataOuter))]
-y = [np.random.random() for i in range(len(dataOuter))]
+#x = [np.random.random() for i in range(len(dataOuter))]
+#y = [np.random.random() for i in range(len(dataOuter))]
 
-fig = plt.figure(figsize=(20, 8))
-ax = plt.subplot(111)
+#fig = plt.figure(figsize=(20, 8))
+#ax = plt.subplot(111)
 
-print(dataOuter)
+print(mapping[str(np.argmax(dataOuter))])
 
-#print(data)
+# print(data)

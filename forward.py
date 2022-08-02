@@ -8,7 +8,7 @@ averageRatings = {}
 rawMapping = []
 mapping = {}
 
-with open('datasets/movies.dat','r',encoding="UTF8") as f:
+with open('datasets/movies.dat', 'r', encoding="UTF8") as f:
     rawMapping = f.readlines()
 
 for line in rawMapping:
@@ -45,9 +45,10 @@ for i in range(0, len(users)):
 
 
 userBest = np.array(users[bestIndex])
-print("Matching user is " + str(bestIndex+1) + " with a simmilarity of " + str(bestCos))
+print("Matching user is " + str(bestIndex+1) +
+      " with a simmilarity of " + str(bestCos))
 
-for i in range(0,len(userBest)):
+for i in range(0, len(userBest)):
     if str(userBest[i]) != averageRatings[str(i+1)]:
         print(mapping[str(i+1)] + " = " + str(userBest[i]))
 

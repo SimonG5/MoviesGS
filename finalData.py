@@ -1,5 +1,7 @@
 import csv
 import json
+from sklearn.impute import KNNImputer
+import numpy as np
 
 averageRatings = {}
 
@@ -14,9 +16,7 @@ with open('datasets/ratings.dat', 'r', encoding="UTF8") as f:
 
 rateCounter = 0
 lastUserId = "1"
-users = []
-print(averageRatings["1"])
-print(len(ratings))
+users = np.zeros(shape=(11431, 1130))
 
 
 for i in range(0, len(ratings)):
@@ -24,6 +24,8 @@ for i in range(0, len(ratings)):
     if rateCounter > 0:
         rateCounter -= 1
         continue
+
+    print(i)
 
     format = ratings[i].split("::")
 
@@ -39,19 +41,25 @@ for i in range(0, len(ratings)):
     for l in range(0, 1130):
         temp.append("-1")
 
+    user = 0
+
     for j in range(i, i+rateCounter):
         format = ratings[j].split("::")
+        user = int(format[0]) - 1
+        users[int(format[0]) - 1, int(format[1]) -
+              1] = float(format[2].rstrip())
         temp[int(format[1]) - 1] = format[2].rstrip()
 
     for k in range(1, 1131):
         if temp[k-1] == "-1":
+            users[user, k-1] = np.nan
             temp[k-1] = averageRatings[str(k)].rstrip()
 
-    users.append(temp)
 
+imputer = KNNImputer(n_neighbors=10)
+imputer.fit_transform(users)
+print(users)
 
-for i in range(0, len(users)):
-    print(len(users[i]))
 
 with open("final.csv", "w") as f:
     writer = csv.writer(f)
